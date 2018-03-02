@@ -5,18 +5,21 @@
 
 これはなに？
 ---
-Excel 2013 以前ではサポートされていないワークシート関数の一部  
+[Excel 2013 以前ではサポートされていないワークシート関数](https://blogs.office.com/en-us/2016/02/23/6-new-excel-functions-that-simplify-your-formula-editing-experience/)  
 
 - IFS  
 - SWITCH  
 - CONCAT  
 - TEXTJOIN  
+- MAXIFS  
+- MINIFS  
 
 を、ユーザー定義関数により、疑似的に使用できるようにするためのアドインです。  
 
 なお、各関数の使い方や、ユーザー定義関数の実装については、  
 
-> [関数リファレンス | 経理・会計事務所向けエクセルスピードアップ講座](https://www.excelspeedup.com/category/kansuu/)  
+- [関数リファレンス | 経理・会計事務所向けエクセルスピードアップ講座](https://www.excelspeedup.com/category/kansuu/)  
+- [ユーザー定義関数：MAXIFS・MINIFS（Excel 2013以前向け）](https://gist.github.com/furyutei/ca02a52e564535e051f1d96eba390e8d)
 
 をご参照ください。
 
@@ -85,7 +88,8 @@ Mac の場合にはインストール／アンインストール用の VBScript 
 
 へのリンクをお願いします。  
 
-また、当方(風柳)は、[こちらの各記事](https://www.excelspeedup.com/category/kansuu/)に掲載されたユーザ定義関数をまとめて利用しやすくしただけであり、各関数に関して動作検証などは実施しておりませんので、あしからず。  
+なお、当方(風柳)は、[こちらの各記事](https://www.excelspeedup.com/category/kansuu/)に掲載されたユーザ定義関数については、まとめて利用しやすくしただけであり、各関数に関して動作検証などは実施しておりません。  
+[一部の関数（MAXIFS・MINIFS）については実装を行いましたが](https://gist.github.com/furyutei/ca02a52e564535e051f1d96eba390e8d)、簡単な動作確認を行ったのみです。  
 
 
 謝辞
@@ -93,7 +97,7 @@ Mac の場合にはインストール／アンインストール用の VBScript 
 - [はけた(羽毛田　睦土) 様](https://www.excelspeedup.com/) [@excelspeedup](https://twitter.com/excelspeedup)  
     > [関数リファレンス | 経理・会計事務所向けエクセルスピードアップ講座](https://www.excelspeedup.com/category/kansuu/)  
     
-    にあるユーザー定義関数を使用させていただきました。  
+    にある[ユーザー定義関数を使用させていただきました](https://twitter.com/excelspeedup/status/968806992029433857)。  
 
 
 
@@ -101,4 +105,4 @@ Mac の場合にはインストール／アンインストール用の VBScript 
 
     > [VBScript で Excel にアドインを自動でインストール/アンインストールする方法: ある SE のつぶやき](http://fnya.cocolog-nifty.com/blog/2014/03/vbscript-excel-.html)
 
-    にあるインストール／アンインストール用スクリプトを使用させていただきました。  
+    にある[インストール／アンインストール用スクリプトを使用させていただきました](https://twitter.com/fnya/status/968810606793973760)。  
