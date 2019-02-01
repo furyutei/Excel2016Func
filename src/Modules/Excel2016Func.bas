@@ -1,4 +1,6 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "Excel2016Func"
+Option Explicit
+
 ' [関数リファレンス | 経理・会計事務所向けエクセルスピードアップ講座](https://www.excelspeedup.com/category/kansuu/)
 
 ' [ifs関数の使い方とExcel2013以前の古いエクセルで使う方法](https://www.excelspeedup.com/ifs/)
@@ -38,44 +40,83 @@ Function SWITCH(ParamArray par())
 End Function
 
 ' [concat関数の使い方とExcel2013以前の古いエクセルで使う方法](https://www.excelspeedup.com/concat2/)
-Function CONCAT(ParamArray par())
-  Dim i As Integer
-  Dim tR As Range
-  
-  CONCAT = ""
-  For i = LBound(par) To UBound(par)
-    If TypeName(par(i)) = "Range" Then
-      For Each tR In par(i)
-        CONCAT = CONCAT & tR.Value2
-      Next
-    Else
-      CONCAT = CONCAT & par(i)
-    End If
-  Next
+Function CONCAT(ParamArray parA())
+    Dim min_i As Long: min_i = LBound(parA)
+    Dim max_i As Long: max_i = UBound(parA)
+    Dim par As Variant
+    Dim tRA As Variant
+    Dim row As Long
+    Dim column As Long
+
+    CONCAT = ""
+    
+    If max_i - min_i + 1 < 1 Then Exit Function
+    
+    For Each par In parA
+        If TypeName(par) = "Range" Then
+            tRA = par.Value2
+            If IsArray(tRA) Then
+                For row = LBound(tRA, 1) To UBound(tRA, 1)
+                    For column = LBound(tRA, 2) To UBound(tRA, 2)
+                        CONCAT = CONCAT & CStr(tRA(row, column))
+                    Next
+                Next
+            Else
+                CONCAT = CONCAT & CStr(tRA)
+            End If
+        ElseIf IsArray(par) Then
+            For Each tRA In par
+                CONCAT = CONCAT & CStr(tRA)
+            Next
+        Else
+            CONCAT = CONCAT & CStr(par)
+        End If
+    Next
 End Function
 
-' [textjoin関数の使い方とExcel2013以前の古いエクセルで使う方法](https://www.excelspeedup.com/textjoin2/)
-Function TEXTJOIN(Delim, Ignore As Boolean, ParamArray par())
-  Dim i As Integer
-  Dim tR As Range
-   
-  TEXTJOIN = ""
-  For i = LBound(par) To UBound(par)
-    If TypeName(par(i)) = "Range" Then
-      For Each tR In par(i)
-        If tR.Value <> "" Or Ignore = False Then
-          TEXTJOIN = TEXTJOIN & Delim & tR.Value2
+' [TEXTJOIN関数の使い方とExcel2013以前の古いエクセルで使う方法](https://www.excelspeedup.com/TEXTJOIN2/)
+Function TEXTJOIN(Delim, Ignore As Boolean, ParamArray parA())
+    Dim min_i As Long: min_i = LBound(parA)
+    Dim max_i As Long: max_i = UBound(parA)
+    Dim par As Variant
+    Dim tRA As Variant
+    Dim row As Long
+    Dim column As Long
+
+    TEXTJOIN = ""
+    
+    If max_i - min_i + 1 < 1 Then Exit Function
+    
+    For Each par In parA
+        If TypeName(par) = "Range" Then
+            tRA = par.Value2
+            If IsArray(tRA) Then
+                For row = LBound(tRA, 1) To UBound(tRA, 1)
+                    For column = LBound(tRA, 2) To UBound(tRA, 2)
+                        If tRA(row, column) <> "" Or Ignore = False Then
+                            TEXTJOIN = TEXTJOIN & Delim & CStr(tRA(row, column))
+                        End If
+                    Next
+                Next
+            Else
+                If tRA <> "" Or Ignore = False Then
+                    TEXTJOIN = TEXTJOIN & Delim & CStr(tRA)
+                End If
+            End If
+        ElseIf IsArray(par) Then
+            For Each tRA In par
+                If tRA <> "" Or Ignore = False Then
+                    TEXTJOIN = TEXTJOIN & Delim & CStr(tRA)
+                End If
+            Next
+        Else
+            If par <> "" Or Ignore = False Then
+                TEXTJOIN = TEXTJOIN & Delim & CStr(par)
+            End If
         End If
-      Next
-    Else
-      If par(i) <> "" Or Ignore = False Then
-        TEXTJOIN = TEXTJOIN & Delim & par(i)
-      End If
-    End If
-  Next
+    Next
   
-  TEXTJOIN = Mid(TEXTJOIN, Len(Delim) + 1)
-  
+    TEXTJOIN = Mid(TEXTJOIN, Len(Delim) + 1)
 End Function
 
 ' [ユーザー定義関数：MAXIFS・MINIFS（Excel 2013以前向け）](https://gist.github.com/furyutei/ca02a52e564535e051f1d96eba390e8d#file-maxifs)
