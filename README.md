@@ -1,4 +1,4 @@
-このアドオン（Excel2016Func）について
+このアドイン（Excel2016Func）について
 ======================================
 配布者：©2018 [風柳](http://furyu.hatenablog.com/about)  [@furyutei](https://twitter.com/furyutei)  
 
