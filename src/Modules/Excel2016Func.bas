@@ -40,58 +40,77 @@ Function SWITCH(ParamArray par())
 End Function
 
 ' [concat関数の使い方とExcel2013以前の古いエクセルで使う方法](https://www.excelspeedup.com/concat2/)
-Function CONCAT(ParamArray parA()) As String
-    CONCAT = TextJoinCommon("", True, parA)
+Function CONCAT(ParamArray para()) As String
+    CONCAT = TextJoinCommon("", True, para)
 End Function
 
 ' [TEXTJOIN関数の使い方とExcel2013以前の古いエクセルで使う方法](https://www.excelspeedup.com/TEXTJOIN2/)
-Function TEXTJOIN(Delim, Ignore As Boolean, ParamArray parA()) As String
-    TEXTJOIN = TextJoinCommon(Delim, Ignore, parA)
+Function TEXTJOIN(Delim, Ignore As Boolean, ParamArray para()) As String
+    TEXTJOIN = TextJoinCommon(Delim, Ignore, para)
 End Function
 
-Private Function TextJoinCommon(Delim, Ignore As Boolean, ByVal parA As Variant) As String
-    Dim min_i As Long: min_i = LBound(parA)
-    Dim max_i As Long: max_i = UBound(parA)
+Private Function TextJoinCommon(Delim, Ignore As Boolean, ByVal para As Variant) As String
+    Dim min_i As Long: min_i = LBound(para)
+    Dim max_i As Long: max_i = UBound(para)
     Dim par As Variant
-    Dim tRA As Variant
-    Dim row As Long
-    Dim column As Long
-
+    Dim value As Variant
+    Dim value_counter As Long
+    Dim delim_array As Variant: delim_array = ToArray(Delim)
+    Dim delim_number As Long: delim_number = UBound(delim_array) - LBound(delim_array) + 1
+    Dim delim_str As String
+    
     TextJoinCommon = ""
     
     If max_i - min_i + 1 < 1 Then Exit Function
     
-    For Each par In parA
-        If TypeName(par) = "Range" Then
-            tRA = par.Value2
-            If IsArray(tRA) Then
-                For row = LBound(tRA, 1) To UBound(tRA, 1)
-                    For column = LBound(tRA, 2) To UBound(tRA, 2)
-                        If tRA(row, column) <> "" Or Ignore = False Then
-                            TextJoinCommon = TextJoinCommon & Delim & CStr(tRA(row, column))
-                        End If
-                    Next
-                Next
-            Else
-                If tRA <> "" Or Ignore = False Then
-                    TextJoinCommon = TextJoinCommon & Delim & CStr(tRA)
-                End If
+    value_counter = 0
+    delim_str = ""
+
+    For Each par In para
+        For Each value In ToArray(par)
+            value = CStr(value)
+            If value <> "" Or Ignore = False Then
+                delim_str = CStr(delim_array(value_counter Mod delim_number))
+                TextJoinCommon = TextJoinCommon & CStr(value) & delim_str
+                value_counter = value_counter + 1
             End If
-        ElseIf IsArray(par) Then
-            For Each tRA In par
-                If tRA <> "" Or Ignore = False Then
-                    TextJoinCommon = TextJoinCommon & Delim & CStr(tRA)
-                End If
+        Next
+    Next
+    
+    TextJoinCommon = Mid(TextJoinCommon, 1, Len(TextJoinCommon) - Len(delim_str))
+End Function
+
+Private Function ToArray(ByVal par As Variant) As Variant()
+    Dim values As Variant
+    Dim row As Long
+    Dim column As Long
+    Dim index As Long
+    Dim text_array() As Variant
+    
+    If TypeName(par) = "Range" Then
+        values = par.Value2
+        If IsArray(values) Then
+            ReDim text_array(0 To (UBound(values, 1) - LBound(values, 1) + 1) * (UBound(values, 2) - LBound(values, 2) + 1) - 1)
+            index = 0
+            For row = LBound(values, 1) To UBound(values, 1)
+                For column = LBound(values, 2) To UBound(values, 2)
+                    text_array(index) = values(row, column)
+                    index = index + 1
+                Next
             Next
         Else
-            If par <> "" Or Ignore = False Then
-                TextJoinCommon = TextJoinCommon & Delim & CStr(par)
-            End If
+            text_array = Array(values)
         End If
-    Next
-  
-    TextJoinCommon = Mid(TextJoinCommon, Len(Delim) + 1)
+    ElseIf IsArray(par) Then
+        ReDim Preserve par(0 To UBound(par) - LBound(par))
+        text_array = par
+    Else
+        text_array = Array(par)
+    End If
+    
+    ToArray = text_array
 End Function
+
 
 ' [ユーザー定義関数：MAXIFS・MINIFS（Excel 2013以前向け）](https://gist.github.com/furyutei/ca02a52e564535e051f1d96eba390e8d#file-maxifs)
 Function MAXIFS(max_range As Range, ParamArray criteria_list())
