@@ -102,8 +102,32 @@ Private Function ToArray(ByVal par As Variant) As Variant()
             text_array = Array(values)
         End If
     ElseIf IsArray(par) Then
-        ReDim Preserve par(0 To UBound(par) - LBound(par))
-        text_array = par
+        index = 0
+        On Error Resume Next
+        Do
+            index = index + 1
+            column = UBound(par, index)
+        Loop While Err.Number = 0
+        index = index - 1
+        On Error GoTo 0
+    
+        If index < 2 Then
+            If LBound(par) = 0 Then
+                text_array = par
+            Else
+                ReDim Preserve par(0 To UBound(par) - LBound(par))
+                text_array = par
+            End If
+        Else
+            ReDim text_array(0 To (UBound(par, 1) - LBound(par, 1) + 1) * (UBound(par, 2) - LBound(par, 2) + 1) - 1)
+            index = 0
+            For column = LBound(par, 2) To UBound(par, 2)
+                For row = LBound(par, 1) To UBound(par, 1)
+                    text_array(index) = par(row, column)
+                    index = index + 1
+                Next
+            Next
+        End If
     Else
         text_array = Array(par)
     End If
